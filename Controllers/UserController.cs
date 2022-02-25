@@ -69,7 +69,7 @@ namespace driver_app_api.Controllers
         {
             dynamic result = null;
             using (var context = new DB(_configuration))
-            {
+            {                   
                 var joinUser = (from u in context.User
                                 join r in context.Role on u.Role_id equals r.Role_id into joinData
                                 from user_role in joinData.DefaultIfEmpty()
