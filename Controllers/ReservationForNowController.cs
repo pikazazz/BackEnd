@@ -128,8 +128,8 @@ namespace driver_app_api
                 {
                     var reservationForNow = context.ReservationForNow.Where(e => e.res_id == id).FirstOrDefault();
                     if (reservationForNow == null) return new JsonResult(result);
-                    reservationForNow.res_date = reservationForNowData.res_date;
-                    reservationForNow.User_id = reservationForNowData.User_id;
+                    reservationForNow.res_date = reservationForNowData.res_date??reservationForNow.res_date;
+                    reservationForNow.User_id = reservationForNowData.User_id??reservationForNow.User_id;
                     response = context.ReservationForNow.Update(reservationForNow).ToString();
                     context.SaveChanges();
                 }
