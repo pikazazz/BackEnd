@@ -3,6 +3,7 @@ namespace driver_app_api
 {
     public class User
     {
+        public string? Email { get; set; }
         public int? User_id { get; set; }
         public string? Firstname { get; set; }
         public string? Lastname { get; set; }

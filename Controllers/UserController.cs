@@ -22,13 +22,13 @@ namespace driver_app_api.Controllers
                 try
                 {
                     response = context.User.Add(userData).ToString();
-                    context.SaveChanges();  result = new
-                {
-                    response
-                };
-                    
+                    context.SaveChanges(); result = new
+                    {
+                        response
+                    };
+
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     result = ex.Message.ToString();
                 }
@@ -49,21 +49,42 @@ namespace driver_app_api.Controllers
             {
                 result = new
                 {
-                    response = (from u in context.User join r in context.Role on u.Role_id equals r.Role_id into joinData from user_role in joinData.DefaultIfEmpty() join dl in context.Driving_License on u.Driving_id equals dl.Driving_id into joinData2 from user_driving in joinData2.DefaultIfEmpty() select new { u.User_id, u.Firstname, u.Lastname, u.user_Address, u.Password, u.dateOfBirth, u.CitizenId, role = user_role, driving = user_driving }).ToList()
+                    response = (from u in context.User
+                                join r in context.Role on u.Role_id equals r.Role_id into joinData
+                                from user_role in joinData.DefaultIfEmpty()
+                                join rfn in context.ReservationForNow on u.User_id equals rfn.User_id into urfn_join
+                                from urfn in urfn_join.DefaultIfEmpty()
+                                join wt in context.Writing_Test on urfn.res_id equals wt.res_id into wt_join
+                                from rwt in wt_join.DefaultIfEmpty()
+                                join dt in context.Driving_Test on urfn.res_id equals dt.res_id into dt_join
+                                from rdt in dt_join.DefaultIfEmpty()
+                                select new { user = u, user_role.Role_name, user_role.Role_description, reservation_for_now = urfn, driving_test = rdt, writing_test = rwt }).ToList()
+
                 };
             }
             return new JsonResult(result);
         }
         [HttpGet("[action]/{id}")]
-        public JsonResult GetUserById([FromRoute]int id)
+        public JsonResult GetUserById([FromRoute] int id)
         {
             dynamic result = null;
-            using(var context = new DB(_configuration))
+            using (var context = new DB(_configuration))
             {
-                var joinUser = (from u in context.User join r in context.Role on u.Role_id equals r.Role_id into joinData from user_role in joinData.DefaultIfEmpty() join dl in context.Driving_License on u.Driving_id equals dl.Driving_id into joinData2 from user_driving in joinData2.DefaultIfEmpty() select new {u.User_id, u.Firstname, u.Lastname, u.user_Address, u.Password, u.dateOfBirth, u.CitizenId,role=user_role,driving=user_driving });
+                var joinUser = (from u in context.User
+                                join r in context.Role on u.Role_id equals r.Role_id into joinData
+                                from user_role in joinData.DefaultIfEmpty()
+                                join rfn in context.ReservationForNow on u.User_id equals rfn.User_id into urfn_join
+                                from urfn in urfn_join.DefaultIfEmpty()
+                                join wt in context.Writing_Test on urfn.res_id equals wt.res_id into wt_join
+                                from rwt in wt_join.DefaultIfEmpty()
+                                join dt in context.Driving_Test on urfn.res_id equals dt.res_id into dt_join
+                                from rdt in dt_join.DefaultIfEmpty()
+                                select new { user = u, user_role.Role_name, user_role.Role_description, reservation_for_now = urfn, driving_test = rdt, writing_test = rwt });
+                
+
                 result = new
                 {
-                    response = joinUser.Where(e => e.User_id == id).FirstOrDefault()
+                    response = joinUser.Where(e => e.user.User_id == id).FirstOrDefault()
                 };
             }
 
@@ -80,9 +101,10 @@ namespace driver_app_api.Controllers
                 try
                 {
                     var user = context.User.Where(e => e.User_id == id).FirstOrDefault();
-                     response = context.User.Remove(user).ToString();
+                    response = context.User.Remove(user).ToString();
                     context.SaveChanges();
-                }catch(Exception ex)
+                }
+                catch (Exception ex)
                 {
                     response = ex.Message;
                 }
@@ -97,7 +119,7 @@ namespace driver_app_api.Controllers
         }
 
         [HttpPut("[action]/{id}")]
-        public JsonResult PutUserById([FromRoute] int id,[FromBody] User userData)
+        public JsonResult PutUserById([FromRoute] int id, [FromBody] User userData)
         {
             dynamic result = null;
             dynamic response = null;
@@ -107,14 +129,14 @@ namespace driver_app_api.Controllers
                 {
                     var user = context.User.Where(e => e.User_id == id).FirstOrDefault();
                     if (user == null) return new JsonResult(result);
-                    user.Firstname = userData.Firstname;
-                    user.Lastname = userData.Lastname;
-                    user.Password = userData.Password; 
+                    user.Firstname = userData.Firstname ?? user.Firstname;
+                    user.Lastname = userData.Lastname ?? user.Lastname; 
+                    user.Password = userData.Password ??user.Password;
                     user.Role_id = userData.Role_id;
                     user.user_Address = userData.user_Address;
                     user.CitizenId = userData.CitizenId;
                     user.dateOfBirth = userData.dateOfBirth;
-                    user.Driving_id= userData.Driving_id;
+                    user.Driving_id = userData.Driving_id;
                     user.user_Phone = userData.user_Phone;
                     response = context.User.Update(user).ToString();
                     context.SaveChanges();
