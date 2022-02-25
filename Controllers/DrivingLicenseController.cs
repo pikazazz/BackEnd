@@ -18,25 +18,8 @@ namespace driver_app_api.Controllers
             dynamic result = null;
             using (var context = new DB(_configuration))
             {
-            dynamic response = (from dl in context.Driving_License join u in context.User on dl.User_id equals u.User_id into joinData from dlu in joinData.DefaultIfEmpty() select new
-            {
-                dl.Driving_id,dl.User_id,dl.Driving_name,dl.Location,user=dlu
-            }).ToList();
-                result = new
-                {
-                    response
-                };
-            }
-
-            return new JsonResult(result);
-        }
-        [HttpGet("[action]/{id}")]
-        public JsonResult GetDrivingLicenseById([FromRoute]int id)
-        {
-            dynamic result = null;
-            using (var context = new DB(_configuration))
-            {
-                var data = (from dl in context.Driving_License
+                // SELECT  dl.Driving_id,dl.User_id,dl.Driving_name,dl.Location,user=dlu from Driving_License dl join user u on dl.user_id = u.user_id
+                dynamic response = (from dl in context.Driving_License
                                     join u in context.User on dl.User_id equals u.User_id into joinData
                                     from dlu in joinData.DefaultIfEmpty()
                                     select new
@@ -46,11 +29,37 @@ namespace driver_app_api.Controllers
                                         dl.Driving_name,
                                         dl.Location,
                                         user = dlu
-                                    });
+                                    }).ToList();
+                result = new
+                {
+                    response
+                };
+            }
+
+            return new JsonResult(result);
+        }
+        [HttpGet("[action]/{id}")]
+        public JsonResult GetDrivingLicenseById([FromRoute] int id)
+        {
+            dynamic result = null;
+            using (var context = new DB(_configuration))
+            {
+                // Select dl.Driving_id,dl.User_id, dl.Driving_name,dl.Location,u.* from Driving_License dl join user u on dl.user_id = u.user_id
+                var data = (from dl in context.Driving_License
+                            join u in context.User on dl.User_id equals u.User_id into joinData
+                            from dlu in joinData.DefaultIfEmpty()
+                            select new
+                            {
+                                dl.Driving_id,
+                                dl.User_id,
+                                dl.Driving_name,
+                                dl.Location,
+                                user = dlu
+                            });
                 result = new
                 {
                     response = data.Where(e => e.Driving_id == id).FirstOrDefault()
-            };
+                };
             }
 
             return new JsonResult(result);
@@ -64,6 +73,7 @@ namespace driver_app_api.Controllers
                 dynamic response = null;
                 try
                 {
+                    // insert into Driving_License values(?,?,?)
                     response = context.Driving_License.Add(dlData).ToString();
                     context.SaveChanges(); result = new
                     {
@@ -91,6 +101,7 @@ namespace driver_app_api.Controllers
             {
                 try
                 {
+                    // update Driving_License set ? = ? where ;
                     var drivingLicense = context.Driving_License.Where(e => e.Driving_id == id).FirstOrDefault();
                     if (drivingLicense == null) return new JsonResult(result);
                     drivingLicense.Driving_name = drivingLicenseData.Driving_name;
@@ -142,5 +153,5 @@ namespace driver_app_api.Controllers
         }
     }
 
-    
+
 }

@@ -20,6 +20,7 @@ namespace driver_app_api.Controllers
             dynamic result = null;
             using (var context = new DB(_configuration))
             {
+                // SELECT  u.Firstname, u.Lastname, u.user_Address, u.Password, u.dateOfBirth, u.CitizenId, user_role.Role_name, user_role.Role_description from user u join role r on u.role_id = r.role_id where u.CitizenId = ? and Password = ?;
                 var joinUser = (from u in context.User join r in context.Role on u.Role_id equals r.Role_id into joinData from user_role in joinData.DefaultIfEmpty() select new { u.Firstname, u.Lastname, u.user_Address, u.Password, u.dateOfBirth, u.CitizenId, user_role.Role_name, user_role.Role_description });
                 result = new
                 {
