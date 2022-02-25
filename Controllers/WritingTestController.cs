@@ -86,9 +86,9 @@ namespace driver_app_api
                 {
                     var writingTest = context.Writing_Test.Where(e => e.writingTest_id == id).FirstOrDefault();
                     if (writingTest == null) return new JsonResult(result);
-                    writingTest.writingTest_score = writingTestData.writingTest_score;
-                    writingTest.staff_id = writingTestData.staff_id;
-                    writingTest.res_id = writingTestData.res_id;
+                    writingTest.writingTest_score = writingTestData.writingTest_score ?? writingTest.writingTest_score;
+                    writingTest.staff_id = writingTestData.staff_id ??writingTest.staff_id ;
+                    writingTest.res_id = writingTestData.res_id??writingTest.res_id;
 
 
                     response = context.Writing_Test.Update(writingTest).ToString();

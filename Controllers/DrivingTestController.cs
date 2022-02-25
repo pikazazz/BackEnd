@@ -91,9 +91,9 @@ namespace driver_app_api.Controllers
                 {
                     var drivingTest = context.Driving_Test.Where(e => e.drivingTest_id == id).FirstOrDefault();
                     if (drivingTest == null) return new JsonResult(result);
-                    drivingTest.drivingTest_score = drivingTestData.drivingTest_score;
-                    drivingTest.staff_id = drivingTestData.staff_id;
-                    drivingTest.res_id = drivingTestData.res_id;
+                    drivingTest.drivingTest_score = drivingTestData.drivingTest_score??drivingTest.drivingTest_score;
+                    drivingTest.staff_id = drivingTestData.staff_id??drivingTest.staff_id;
+                    drivingTest.res_id = drivingTestData.res_id??drivingTest.res_id;
 
 
                     response = context.Driving_Test.Update(drivingTest).ToString();

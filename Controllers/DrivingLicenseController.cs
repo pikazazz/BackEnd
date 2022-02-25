@@ -104,9 +104,9 @@ namespace driver_app_api.Controllers
                     // update Driving_License set ? = ? where ;
                     var drivingLicense = context.Driving_License.Where(e => e.Driving_id == id).FirstOrDefault();
                     if (drivingLicense == null) return new JsonResult(result);
-                    drivingLicense.Driving_name = drivingLicenseData.Driving_name;
-                    drivingLicense.User_id = drivingLicenseData.User_id;
-                    drivingLicense.Location = drivingLicenseData.Location;
+                    drivingLicense.Driving_name = drivingLicenseData.Driving_name??drivingLicense.Driving_name;
+                    drivingLicense.User_id = drivingLicenseData.User_id??drivingLicense.User_id;
+                    drivingLicense.Location = drivingLicenseData.Location??drivingLicense.Location;
 
 
                     response = context.Driving_License.Update(drivingLicense).ToString();

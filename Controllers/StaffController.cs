@@ -108,9 +108,9 @@ namespace driver_app_api.Controllers
                 {
                     var staff = context.Staff.Where(e => e.Staff_id == id).FirstOrDefault();
                     if (staff == null) return new JsonResult(result);
-                    staff.Staff_name = staffData.Staff_name;
-                    staff.Staff_lastname = staffData.Staff_lastname;
-                    staff.Staff_phone = staffData.Staff_phone;
+                    staff.Staff_name = staffData.Staff_name ??staff.Staff_name;
+                    staff.Staff_lastname = staffData.Staff_lastname??staff.Staff_lastname;
+                    staff.Staff_phone = staffData.Staff_phone ??staff.Staff_phone;
                    
                     
                     response = context.Staff.Update(staff).ToString();
