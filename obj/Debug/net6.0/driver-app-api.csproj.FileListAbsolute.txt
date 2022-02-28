@@ -148,3 +148,13 @@ C:\Users\thumm\Desktop\driverlicense\BackEnd\obj\Debug\net6.0\driver-app-api.dll
 C:\Users\thumm\Desktop\driverlicense\BackEnd\obj\Debug\net6.0\ref\driver-app-api.dll
 C:\Users\thumm\Desktop\driverlicense\BackEnd\obj\Debug\net6.0\driver-app-api.pdb
 C:\Users\thumm\Desktop\driverlicense\BackEnd\obj\Debug\net6.0\driver-app-api.genruntimeconfig.cache
+C:\Users\Nuttakarn\Desktop\driver-app-api\driver-app-api\obj\Debug\net6.0\driver-app-api.csproj.AssemblyReference.cache
+C:\Users\Nuttakarn\Desktop\driver-app-api\driver-app-api\obj\Debug\net6.0\driver-app-api.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Nuttakarn\Desktop\driver-app-api\driver-app-api\obj\Debug\net6.0\driver-app-api.AssemblyInfoInputs.cache
+C:\Users\Nuttakarn\Desktop\driver-app-api\driver-app-api\obj\Debug\net6.0\driver-app-api.AssemblyInfo.cs
+C:\Users\Nuttakarn\Desktop\driver-app-api\driver-app-api\obj\Debug\net6.0\driver-app-api.csproj.CoreCompileInputs.cache
+C:\Users\Nuttakarn\Desktop\driver-app-api\driver-app-api\obj\Debug\net6.0\driver-app-api.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\Nuttakarn\Desktop\driver-app-api\driver-app-api\obj\Debug\net6.0\driver-app-api.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\Nuttakarn\Desktop\driver-app-api\driver-app-api\obj\Debug\net6.0\driver-app-api.dll
+C:\Users\Nuttakarn\Desktop\driver-app-api\driver-app-api\obj\Debug\net6.0\ref\driver-app-api.dll
+C:\Users\Nuttakarn\Desktop\driver-app-api\driver-app-api\obj\Debug\net6.0\driver-app-api.pdb

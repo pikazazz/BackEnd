@@ -1,25 +1,28 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\thumm\\Desktop\\driverlicense\\BackEnd\\driver-app-api.csproj": {}
+    "C:\\Users\\Nuttakarn\\Desktop\\driver-app-api\\driver-app-api\\driver-app-api.csproj": {}
   },
   "projects": {
-    "C:\\Users\\thumm\\Desktop\\driverlicense\\BackEnd\\driver-app-api.csproj": {
+    "C:\\Users\\Nuttakarn\\Desktop\\driver-app-api\\driver-app-api\\driver-app-api.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\thumm\\Desktop\\driverlicense\\BackEnd\\driver-app-api.csproj",
+        "projectUniqueName": "C:\\Users\\Nuttakarn\\Desktop\\driver-app-api\\driver-app-api\\driver-app-api.csproj",
         "projectName": "driver-app-api",
-        "projectPath": "C:\\Users\\thumm\\Desktop\\driverlicense\\BackEnd\\driver-app-api.csproj",
-        "packagesPath": "C:\\Users\\thumm\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\thumm\\Desktop\\driverlicense\\BackEnd\\obj\\",
+        "projectPath": "C:\\Users\\Nuttakarn\\Desktop\\driver-app-api\\driver-app-api\\driver-app-api.csproj",
+        "packagesPath": "C:\\Users\\Nuttakarn\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Nuttakarn\\Desktop\\driver-app-api\\driver-app-api\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\thumm\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\Nuttakarn\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net6.0"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "http://203.154.41.4/MangoNuget/nuget": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
