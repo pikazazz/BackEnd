@@ -105,7 +105,7 @@ namespace driver_app_api
                 entity.Property(e => e.email);
                 entity.Property(e => e.phone);
                 entity.Property(e => e.citizenId);
-                entity.Property(e => e.driverId);
+                entity.Property(e => e.drivingId);
                 entity.Property(e => e.dateOfBirth);
             });
         }

@@ -7,7 +7,7 @@ namespace driver_app_api
         public string? email { get; set; }
         public string? phone { get; set; }
         public int? citizenId { get; set; }
-        public int? driverId { get; set; }
+        public int? drivingId { get; set; }
         public DateTime? dateOfBirth { get; set; }
 
     }
