@@ -19,18 +19,23 @@ namespace driver_app_api
         {
             dynamic result = null;
 
-            using(var context = new DB(_configuration))
+            using (var context = new DB(_configuration))
             {
                 result = new
                 {
                     response = (from rfn in context.ReservationForNow
                                 join u in context.User on rfn.User_id equals u.User_id into joinData
                                 from rfnu in joinData.DefaultIfEmpty()
+                                join b in context.Booking on rfn.booking_id equals b.id into bookingData
+                                from bdata in bookingData.DefaultIfEmpty()
                                 select new
                                 {
                                     rfn.res_id,
                                     rfn.res_date,
-                                    user = rfnu
+                                    rfn.service,
+                                    rfn.booking_id,
+                                    user = rfnu,
+                                    booking = bdata
                                 }).ToList()
                 };
             }
@@ -99,14 +104,19 @@ namespace driver_app_api
             using (var context = new DB(_configuration))
             {
                 var data = (from rfn in context.ReservationForNow
-                                join u in context.User on rfn.User_id equals u.User_id into joinData
-                                from rfnu in joinData.DefaultIfEmpty()
-                                select new
-                                {
-                                    rfn.res_id,
-                                    rfn.res_date,
-                                    user = rfnu
-                                });
+                            join u in context.User on rfn.User_id equals u.User_id into joinData
+                            from rfnu in joinData.DefaultIfEmpty()
+                            join b in context.Booking on rfn.booking_id equals b.id into bookingData
+                            from bdata in bookingData.DefaultIfEmpty()
+                            select new
+                            {
+                                rfn.res_id,
+                                rfn.res_date,
+                                rfn.service,
+                                rfn.booking_id,
+                                booking=bdata,
+                                user = rfnu
+                            });
                 result = new
                 {
                     response = data.Where(e => e.res_id == id).FirstOrDefault()
@@ -128,8 +138,11 @@ namespace driver_app_api
                 {
                     var reservationForNow = context.ReservationForNow.Where(e => e.res_id == id).FirstOrDefault();
                     if (reservationForNow == null) return new JsonResult(result);
-                    reservationForNow.res_date = reservationForNowData.res_date??reservationForNow.res_date;
-                    reservationForNow.User_id = reservationForNowData.User_id??reservationForNow.User_id;
+                    reservationForNow.res_date = reservationForNowData.res_date ?? reservationForNow.res_date;
+                    reservationForNow.User_id = reservationForNowData.User_id ?? reservationForNow.User_id;
+                    reservationForNow.service = reservationForNowData.service ?? reservationForNow.service;
+                    reservationForNow.booking_id = reservationForNowData.booking_id ?? reservationForNow.booking_id;
+
                     response = context.ReservationForNow.Update(reservationForNow).ToString();
                     context.SaveChanges();
                 }
@@ -147,5 +160,5 @@ namespace driver_app_api
 
         }
     }
-   
+
 }

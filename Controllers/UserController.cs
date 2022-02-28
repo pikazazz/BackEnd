@@ -69,7 +69,7 @@ namespace driver_app_api.Controllers
         {
             dynamic result = null;
             using (var context = new DB(_configuration))
-            {
+            {                   
                 var joinUser = (from u in context.User
                                 join r in context.Role on u.Role_id equals r.Role_id into joinData
                                 from user_role in joinData.DefaultIfEmpty()
@@ -138,6 +138,7 @@ namespace driver_app_api.Controllers
                     user.dateOfBirth = userData.dateOfBirth ?? user.dateOfBirth;
                     user.Driving_id = userData.Driving_id ?? user.Driving_id;
                     user.user_Phone = userData.user_Phone ?? user.user_Phone;
+                    user.Email = userData.Email ?? user.Email;
                     response = context.User.Update(user).ToString();
                     context.SaveChanges();
                 }
