@@ -156,6 +156,7 @@ namespace driver_app_api.Controllers
                     user.Driving_id = userData.Driving_id ?? user.Driving_id;
                     user.user_Phone = userData.user_Phone ?? user.user_Phone;
                     user.Email = userData.Email ?? user.Email;
+                    user.Status = userData.Status ?? user.Status;
                     // update User set ? = ? where User_id = ?;
                     response = context.User.Update(user).ToString();
                     context.SaveChanges();

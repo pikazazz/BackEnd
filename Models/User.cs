@@ -14,5 +14,6 @@ namespace driver_app_api
         public string? Password { get; set; }
         public int? Role_id { get; set; }
         public int? Driving_id { get; set; }
+        public int? Status { get; set; }
     }
 }

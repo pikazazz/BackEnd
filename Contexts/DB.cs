@@ -45,6 +45,7 @@ namespace driver_app_api
                 entity.Property(e => e.Password);
                 entity.Property(e => e.Role_id);
                 entity.Property(e => e.Driving_id);
+                entity.Property(e => e.Status);
             });
             modelBuilder.Entity<Driving_License>(entity =>
             {
