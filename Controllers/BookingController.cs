@@ -18,7 +18,7 @@ namespace driver_app_api.Controllers
             dynamic result = null;
             using (var context = new DB(_configuration))
             {
-                // SELECT  dl.Driving_id,dl.User_id,dl.Driving_name,dl.Location,user=dlu from Driving_License dl join user u on dl.user_id = u.user_id
+                // select id,date,start_time,end_time from Booking;
                 dynamic response = (from b in context.Booking
                                     select new
                                     {
@@ -41,7 +41,7 @@ namespace driver_app_api.Controllers
             dynamic result = null;
             using (var context = new DB(_configuration))
             {
-                // Select dl.Driving_id,dl.User_id, dl.Driving_name,dl.Location,u.* from Driving_License dl join user u on dl.user_id = u.user_id
+                // select id,date,start_time,end_time from Booking where id = ?;
                 var data = (from b in context.Booking
                             select new
                             {
@@ -67,13 +67,9 @@ namespace driver_app_api.Controllers
                 dynamic response = null;
                 try
                 {
-                    // insert into Driving_License values(?,?,?)
+                    // insert into Booking values(?,?,?)
                     response = context.Booking.Add(bookingData).ToString();
-                    context.SaveChanges(); result = new
-                    {
-                        response
-                    };
-
+                    context.SaveChanges();
                 }
                 catch (Exception ex)
                 {
@@ -81,13 +77,14 @@ namespace driver_app_api.Controllers
                 }
                 result = new
                 {
-                    response
+                    response,
+                    data = bookingData
                 };
             }
             return new JsonResult(result);
         }
         [HttpPut("[action]/{id}")]
-        public JsonResult PutDrivingLicenseById([FromRoute] int id, [FromBody] Booking bookingData)
+        public JsonResult PutBookingById([FromRoute] int id, [FromBody] Booking bookingData)
         {
             dynamic? result = null;
             dynamic? response = null;
@@ -95,7 +92,7 @@ namespace driver_app_api.Controllers
             {
                 try
                 {
-                    // update Driving_License set ? = ? where ;
+                    // update Booking set ? = ? where id = ?;
                     var booking = context.Booking.Where(e => e.id == id).FirstOrDefault();
                     if (booking == null) return new JsonResult(result);
                     booking.date = bookingData.date ?? booking.date;
@@ -110,7 +107,8 @@ namespace driver_app_api.Controllers
                 }
                 result = new
                 {
-                    response
+                    response,
+                    data = bookingData
                 };
             }
 
@@ -118,15 +116,17 @@ namespace driver_app_api.Controllers
 
         }
         [HttpDelete("[action]/{id}")]
-        public JsonResult DeleteDrivingLicenseById([FromRoute] int id)
+        public JsonResult DeleteBookingById([FromRoute] int id)
         {
             dynamic? result = null;
             dynamic? response = null;
+            var booking = new Booking();
             using (var context = new DB(_configuration))
             {
                 try
                 {
-                    var booking = context.Booking.Where(e => e.id == id).FirstOrDefault();
+                    booking = context.Booking.Where(e => e.id == id).FirstOrDefault();
+                    // delete Booking where id = ?;
                     response = context.Booking.Remove(booking).ToString();
                     context.SaveChanges();
                 }
@@ -136,7 +136,8 @@ namespace driver_app_api.Controllers
                 }
                 result = new
                 {
-                    response
+                    response,
+                    data = booking
                 };
             }
 
@@ -144,6 +145,5 @@ namespace driver_app_api.Controllers
 
         }
     }
-
 
 }

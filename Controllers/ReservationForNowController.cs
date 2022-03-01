@@ -52,10 +52,7 @@ namespace driver_app_api
                 try
                 {
                     response = context.ReservationForNow.Add(reservationForNowData).ToString();
-                    context.SaveChanges(); result = new
-                    {
-                        response
-                    };
+                    context.SaveChanges();
 
                 }
                 catch (Exception ex)
@@ -64,7 +61,8 @@ namespace driver_app_api
                 }
                 result = new
                 {
-                    response
+                    response,
+                    data = reservationForNowData
                 };
             }
 
@@ -76,11 +74,12 @@ namespace driver_app_api
         {
             dynamic? result = null;
             dynamic? response = null;
+            var reservationForNow = new ReservationForNow();
             using (var context = new DB(_configuration))
             {
                 try
                 {
-                    var reservationForNow = context.ReservationForNow.Where(e => e.res_id == id).FirstOrDefault();
+                    reservationForNow = context.ReservationForNow.Where(e => e.res_id == id).FirstOrDefault();
                     response = context.ReservationForNow.Remove(reservationForNow).ToString();
                     context.SaveChanges();
                 }
@@ -90,7 +89,8 @@ namespace driver_app_api
                 }
                 result = new
                 {
-                    response
+                    response,
+                    data=reservationForNow
                 };
             }
 
@@ -114,7 +114,7 @@ namespace driver_app_api
                                 rfn.res_date,
                                 rfn.service,
                                 rfn.booking_id,
-                                booking=bdata,
+                                booking = bdata,
                                 user = rfnu
                             });
                 result = new
