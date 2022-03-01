@@ -44,7 +44,7 @@ namespace driver_app_api.Controllers
             dynamic result = null;
             using (var context = new DB(_configuration))
             {
-                // Select dl.Driving_id,dl.User_id, dl.Driving_name,dl.Location,u.* from Driving_License dl join user u on dl.user_id = u.user_id
+                // Select dl.Driving_id,dl.User_id, dl.Driving_name,dl.Location,u.* from Driving_License dl join user u on dl.user_id = u.user_id where dl.Driving_id = ?
                 var data = (from dl in context.Driving_License
                             join u in context.User on dl.User_id equals u.User_id into joinData
                             from dlu in joinData.DefaultIfEmpty()
@@ -75,10 +75,7 @@ namespace driver_app_api.Controllers
                 {
                     // insert into Driving_License values(?,?,?)
                     response = context.Driving_License.Add(dlData).ToString();
-                    context.SaveChanges(); result = new
-                    {
-                        response
-                    };
+                    context.SaveChanges(); 
 
                 }
                 catch (Exception ex)
@@ -87,7 +84,8 @@ namespace driver_app_api.Controllers
                 }
                 result = new
                 {
-                    response
+                    response,
+                    data=dlData
                 };
             }
             return new JsonResult(result);
@@ -101,12 +99,12 @@ namespace driver_app_api.Controllers
             {
                 try
                 {
-                    // update Driving_License set ? = ? where ;
+                    // update Driving_License set ? = ? where Driving_id = ?;
                     var drivingLicense = context.Driving_License.Where(e => e.Driving_id == id).FirstOrDefault();
                     if (drivingLicense == null) return new JsonResult(result);
-                    drivingLicense.Driving_name = drivingLicenseData.Driving_name??drivingLicense.Driving_name;
-                    drivingLicense.User_id = drivingLicenseData.User_id??drivingLicense.User_id;
-                    drivingLicense.Location = drivingLicenseData.Location??drivingLicense.Location;
+                    drivingLicense.Driving_name = drivingLicenseData.Driving_name ?? drivingLicense.Driving_name;
+                    drivingLicense.User_id = drivingLicenseData.User_id ?? drivingLicense.User_id;
+                    drivingLicense.Location = drivingLicenseData.Location ?? drivingLicense.Location;
 
 
                     response = context.Driving_License.Update(drivingLicense).ToString();
@@ -118,7 +116,8 @@ namespace driver_app_api.Controllers
                 }
                 result = new
                 {
-                    response
+                    response,
+                    data = drivingLicenseData
                 };
             }
 
@@ -130,11 +129,13 @@ namespace driver_app_api.Controllers
         {
             dynamic? result = null;
             dynamic? response = null;
+            var drivingLicense = new Driving_License();
             using (var context = new DB(_configuration))
             {
                 try
                 {
-                    var drivingLicense = context.Driving_License.Where(e => e.Driving_id == id).FirstOrDefault();
+                    drivingLicense = context.Driving_License.Where(e => e.Driving_id == id).FirstOrDefault();
+                    // delete Driving_license where Driving_id = ?
                     response = context.Driving_License.Remove(drivingLicense).ToString();
                     context.SaveChanges();
                 }
@@ -144,7 +145,8 @@ namespace driver_app_api.Controllers
                 }
                 result = new
                 {
-                    response
+                    response,
+                    data = drivingLicense
                 };
             }
 

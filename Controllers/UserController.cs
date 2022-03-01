@@ -21,6 +21,7 @@ namespace driver_app_api.Controllers
                 dynamic response = null;
                 try
                 {
+                    // insert into User values(?,?,?)
                     response = context.User.Add(userData).ToString();
                     context.SaveChanges(); result = new
                     {
@@ -34,7 +35,8 @@ namespace driver_app_api.Controllers
                 }
                 result = new
                 {
-                    response
+                    response,
+                    data = userData
                 };
             }
 
@@ -49,6 +51,11 @@ namespace driver_app_api.Controllers
             {
                 result = new
                 {
+                    // select u.*, r.Role_name, r.Role_description, rfn.*, dt.*, wt.* from user u 
+                    // join role r on u.Role_id = r.Role_id 
+                    // join ReservationForNow rfn on u.User_id = rfn.User_id
+                    // join Writing_Test wt join rfn.Res_id = wt.Res_id 
+                    // join Driving_Test dt on rfn.Res_id = dt.Res_id
                     response = (from u in context.User
                                 join r in context.Role on u.Role_id equals r.Role_id into joinData
                                 from user_role in joinData.DefaultIfEmpty()
@@ -69,7 +76,13 @@ namespace driver_app_api.Controllers
         {
             dynamic result = null;
             using (var context = new DB(_configuration))
-            {                   
+            {
+                // select u.*, r.Role_name, r.Role_description, rfn.*, dt.*, wt.* from user u 
+                // join role r on u.Role_id = r.Role_id 
+                // join ReservationForNow rfn on u.User_id = rfn.User_id
+                // join Writing_Test wt join rfn.Res_id = wt.Res_id 
+                // join Driving_Test dt on rfn.Res_id = dt.Res_id
+                // where User_id = ?
                 var joinUser = (from u in context.User
                                 join r in context.Role on u.Role_id equals r.Role_id into joinData
                                 from user_role in joinData.DefaultIfEmpty()
@@ -96,11 +109,13 @@ namespace driver_app_api.Controllers
         {
             dynamic? result = null;
             dynamic? response = null;
+            var user = new User();
             using (var context = new DB(_configuration))
             {
                 try
                 {
-                    var user = context.User.Where(e => e.User_id == id).FirstOrDefault();
+                    user = context.User.Where(e => e.User_id == id).FirstOrDefault();
+                    // delete User where user_id = ?
                     response = context.User.Remove(user).ToString();
                     context.SaveChanges();
                 }
@@ -110,7 +125,8 @@ namespace driver_app_api.Controllers
                 }
                 result = new
                 {
-                    response
+                    response,
+                    data = user
                 };
             }
 
@@ -123,11 +139,12 @@ namespace driver_app_api.Controllers
         {
             dynamic result = null;
             dynamic response = null;
+            var user = new User();
             using (var context = new DB(_configuration))
             {
                 try
                 {
-                    var user = context.User.Where(e => e.User_id == id).FirstOrDefault();
+                    user = context.User.Where(e => e.User_id == id).FirstOrDefault();
                     if (user == null) return new JsonResult(result);
                     user.Firstname = userData.Firstname ?? user.Firstname;
                     user.Lastname = userData.Lastname ?? user.Lastname;
@@ -139,6 +156,7 @@ namespace driver_app_api.Controllers
                     user.Driving_id = userData.Driving_id ?? user.Driving_id;
                     user.user_Phone = userData.user_Phone ?? user.user_Phone;
                     user.Email = userData.Email ?? user.Email;
+                    // update User set ? = ? where User_id = ?;
                     response = context.User.Update(user).ToString();
                     context.SaveChanges();
                 }
@@ -148,7 +166,8 @@ namespace driver_app_api.Controllers
                 }
                 result = new
                 {
-                    response
+                    response,
+                    data = user
                 };
             }
 

@@ -51,6 +51,7 @@ namespace driver_app_api
                 dynamic response = null;
                 try
                 {
+                       // insert into ReservationForNow values(?,?,?)
                     response = context.ReservationForNow.Add(reservationForNowData).ToString();
                     context.SaveChanges();
 
@@ -80,6 +81,7 @@ namespace driver_app_api
                 try
                 {
                     reservationForNow = context.ReservationForNow.Where(e => e.res_id == id).FirstOrDefault();
+                    // delete ReservationForNow where res_id = ?
                     response = context.ReservationForNow.Remove(reservationForNow).ToString();
                     context.SaveChanges();
                 }
@@ -132,17 +134,18 @@ namespace driver_app_api
         {
             dynamic result = null;
             dynamic response = null;
+            var reservationForNow = new ReservationForNow();
             using (var context = new DB(_configuration))
             {
                 try
                 {
-                    var reservationForNow = context.ReservationForNow.Where(e => e.res_id == id).FirstOrDefault();
+                    reservationForNow = context.ReservationForNow.Where(e => e.res_id == id).FirstOrDefault();
                     if (reservationForNow == null) return new JsonResult(result);
                     reservationForNow.res_date = reservationForNowData.res_date ?? reservationForNow.res_date;
                     reservationForNow.User_id = reservationForNowData.User_id ?? reservationForNow.User_id;
                     reservationForNow.service = reservationForNowData.service ?? reservationForNow.service;
                     reservationForNow.booking_id = reservationForNowData.booking_id ?? reservationForNow.booking_id;
-
+                    // update ReservationForNow set ? = ? where res_id = ?;
                     response = context.ReservationForNow.Update(reservationForNow).ToString();
                     context.SaveChanges();
                 }
@@ -152,7 +155,8 @@ namespace driver_app_api
                 }
                 result = new
                 {
-                    response
+                    response,
+                    date=reservationForNow
                 };
             }
 

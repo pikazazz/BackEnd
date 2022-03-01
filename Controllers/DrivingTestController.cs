@@ -20,7 +20,8 @@ namespace driver_app_api.Controllers
             {
                 result = new
                 {
-                    response = (from dt in context.Driving_Test join s in context.Staff on dt.staff_id equals s.Staff_id into joinData from dts in joinData.DefaultIfEmpty() join rfn in context.ReservationForNow on dt.res_id equals rfn.res_id into joinData2 from dtrfn in joinData2.DefaultIfEmpty() select new { dt.drivingTest_id,dt.drivingTest_score, staff = dts, reservationForNow = dtrfn }).ToList()
+                    // select dt.drivingTest_id,dt.drivingTest_score, s.*, rfn.* from Driving_Test dt join Staff s on dt.staff_id = s.Staff_id join ReservationForNow rfn on rfn.res_id = dt.res_id
+                    response = (from dt in context.Driving_Test join s in context.Staff on dt.staff_id equals s.Staff_id into joinData from dts in joinData.DefaultIfEmpty() join rfn in context.ReservationForNow on dt.res_id equals rfn.res_id into joinData2 from dtrfn in joinData2.DefaultIfEmpty() select new { dt.drivingTest_id, dt.drivingTest_score, staff = dts, reservationForNow = dtrfn }).ToList()
                 };
             }
             return new JsonResult(result);
@@ -35,11 +36,9 @@ namespace driver_app_api.Controllers
                 dynamic? response = null;
                 try
                 {
+                    // insert into Driving_Test values(?,?,?)
                     response = context.Driving_Test.Add(drivingTestData).ToString();
-                    context.SaveChanges(); result = new
-                    {
-                        response
-                    };
+                    context.SaveChanges();
 
                 }
                 catch (Exception ex)
@@ -48,7 +47,8 @@ namespace driver_app_api.Controllers
                 }
                 result = new
                 {
-                    response
+                    response,
+                    data=drivingTestData
                 };
             }
             return new JsonResult(result);
@@ -64,6 +64,7 @@ namespace driver_app_api.Controllers
                 try
                 {
                     var drivingTest = context.Driving_Test.Where(e => e.drivingTest_id == id).FirstOrDefault();
+                    // delete Driving_Test where drivingTest_id = ?
                     response = context.Driving_Test.Remove(drivingTest).ToString();
                     context.SaveChanges();
                 }
@@ -85,17 +86,18 @@ namespace driver_app_api.Controllers
         {
             dynamic? result = null;
             dynamic? response = null;
+            var drivingTest = new Driving_Test();
             using (var context = new DB(_configuration))
             {
                 try
                 {
-                    var drivingTest = context.Driving_Test.Where(e => e.drivingTest_id == id).FirstOrDefault();
+                    drivingTest = context.Driving_Test.Where(e => e.drivingTest_id == id).FirstOrDefault();
                     if (drivingTest == null) return new JsonResult(result);
-                    drivingTest.drivingTest_score = drivingTestData.drivingTest_score??drivingTest.drivingTest_score;
-                    drivingTest.staff_id = drivingTestData.staff_id??drivingTest.staff_id;
-                    drivingTest.res_id = drivingTestData.res_id??drivingTest.res_id;
+                    drivingTest.drivingTest_score = drivingTestData.drivingTest_score ?? drivingTest.drivingTest_score;
+                    drivingTest.staff_id = drivingTestData.staff_id ?? drivingTest.staff_id;
+                    drivingTest.res_id = drivingTestData.res_id ?? drivingTest.res_id;
 
-
+                    // update Driving_Test set ? = ? where drivingTest_id = ?;
                     response = context.Driving_Test.Update(drivingTest).ToString();
                     context.SaveChanges();
                 }
@@ -105,7 +107,8 @@ namespace driver_app_api.Controllers
                 }
                 result = new
                 {
-                    response
+                    response,
+                    data = drivingTest
                 };
             }
 
@@ -118,7 +121,7 @@ namespace driver_app_api.Controllers
             dynamic? result = null;
             using (var context = new DB(_configuration))
             {
-            
+
                 var data = (from dt in context.Driving_Test join s in context.Staff on dt.staff_id equals s.Staff_id into joinData from dts in joinData.DefaultIfEmpty() join rfn in context.ReservationForNow on dt.res_id equals rfn.res_id into joinData2 from dtrfn in joinData2.DefaultIfEmpty() select new { dt.drivingTest_id, dt.drivingTest_score, staff = dts, reservationForNow = dtrfn });
                 result = new
                 {
