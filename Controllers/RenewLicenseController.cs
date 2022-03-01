@@ -21,12 +21,9 @@ namespace driver_app_api.Controllers
                 dynamic response = null;
                 try
                 {
+                    // insert into RenewLicense values(?,?,?)
                     response = context.RenewLicense.Add(renewLicenseData).ToString();
-                    context.SaveChanges(); result = new
-                    {
-                        response
-                    };
-
+                    context.SaveChanges();
                 }
                 catch (Exception ex)
                 {
@@ -34,7 +31,8 @@ namespace driver_app_api.Controllers
                 }
                 result = new
                 {
-                    response
+                    response,
+                    data = renewLicenseData
                 };
             }
 
@@ -49,10 +47,11 @@ namespace driver_app_api.Controllers
             {
                 result = new
                 {
+                    // select rl.user_id,rl.name,rl.email,rl.phone,rl.citizenId,rl.drivingId,rl.dateOfBirth,d.* from  RenewLicense rl join driving_license on rl.Driving_id = rl.drivingId
                     response = (from rl in context.RenewLicense
                                 join d in context.Driving_License on rl.drivingId equals d.Driving_id into uldJoin
                                 from uldData in uldJoin.DefaultIfEmpty()
-                                select new { rl.user_id,rl.name,rl.email,rl.phone,rl.citizenId,rl.drivingId,rl.dateOfBirth,driving=uldData }).ToList()
+                                select new { rl.user_id, rl.name, rl.email, rl.phone, rl.citizenId, rl.drivingId, rl.dateOfBirth, driving = uldData }).ToList()
 
                 };
             }
@@ -64,10 +63,11 @@ namespace driver_app_api.Controllers
             dynamic result = null;
             using (var context = new DB(_configuration))
             {
+                // select rl.user_id,rl.name,rl.email,rl.phone,rl.citizenId,rl.drivingId,rl.dateOfBirth,d.* from  RenewLicense rl join driving_license on rl.Driving_id = rl.drivingId where user_id = ?
                 var joinUser = (from rl in context.RenewLicense
                                 join d in context.Driving_License on rl.drivingId equals d.Driving_id into uldJoin
                                 from uldData in uldJoin.DefaultIfEmpty()
-                                select new { rl.user_id,rl.name,rl.email,rl.phone,rl.citizenId,rl.drivingId,rl.dateOfBirth,driving=uldData });
+                                select new { rl.user_id, rl.name, rl.email, rl.phone, rl.citizenId, rl.drivingId, rl.dateOfBirth, driving = uldData });
 
 
                 result = new
@@ -89,6 +89,7 @@ namespace driver_app_api.Controllers
                 try
                 {
                     var user = context.RenewLicense.Where(e => e.user_id == id).FirstOrDefault();
+                    // delete RenewLicense where user_id = ?
                     response = context.RenewLicense.Remove(user).ToString();
                     context.SaveChanges();
                 }
@@ -111,11 +112,12 @@ namespace driver_app_api.Controllers
         {
             dynamic result = null;
             dynamic response = null;
+            var renewLicense = new RenewLicense();
             using (var context = new DB(_configuration))
             {
                 try
                 {
-                    var renewLicense = context.RenewLicense.Where(e => e.user_id == id).FirstOrDefault();
+                    renewLicense = context.RenewLicense.Where(e => e.user_id == id).FirstOrDefault();
                     if (renewLicense == null) return new JsonResult(result);
                     renewLicense.name = renewLicenseData.name ?? renewLicense.name;
                     renewLicense.email = renewLicenseData.email ?? renewLicense.email;
@@ -123,6 +125,7 @@ namespace driver_app_api.Controllers
                     renewLicense.citizenId = renewLicenseData.citizenId ?? renewLicense.citizenId;
                     renewLicense.drivingId = renewLicenseData.drivingId ?? renewLicense.drivingId;
                     renewLicense.dateOfBirth = renewLicenseData.dateOfBirth ?? renewLicense.dateOfBirth;
+                    // update RenewLicense set ? = ? where user_id = ?;
                     response = context.RenewLicense.Update(renewLicense).ToString();
                     context.SaveChanges();
                 }
@@ -132,7 +135,8 @@ namespace driver_app_api.Controllers
                 }
                 result = new
                 {
-                    response
+                    response,
+                    data = renewLicense
                 };
             }
 

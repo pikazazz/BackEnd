@@ -21,6 +21,7 @@ namespace driver_app_api.Controllers
                 dynamic response = null;
                 result = new
                 {
+                    // select * from reole
                     response = context.Role.ToList()
                 };
             }

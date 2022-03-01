@@ -20,6 +20,7 @@ namespace driver_app_api.Controllers
             {
                 result = new
                 {
+                    // select * from staff;
                     response = context.Staff.ToList()
                 };
             }
@@ -27,16 +28,17 @@ namespace driver_app_api.Controllers
             return new JsonResult(result);
 
         }
-        
+
         [HttpPost("[action]")]
         public JsonResult PostStaff([FromBody] Staff staffData)
         {
             dynamic result = null;
-            using(var context = new DB(_configuration))
+            using (var context = new DB(_configuration))
             {
                 dynamic response = null;
                 try
                 {
+                      // insert into Staff values(?,?,?)
                     response = context.Staff.Add(staffData).ToString();
                     context.SaveChanges(); result = new
                     {
@@ -50,7 +52,8 @@ namespace driver_app_api.Controllers
                 }
                 result = new
                 {
-                    response
+                    response,
+                    data=staffData
                 };
             }
             return new JsonResult(result);
@@ -76,11 +79,13 @@ namespace driver_app_api.Controllers
         {
             dynamic result = null;
             dynamic response = null;
+            var staff = new Staff();
             using (var context = new DB(_configuration))
             {
                 try
                 {
-                    var staff = context.Staff.Where(e => e.Staff_id == id).FirstOrDefault();
+                    staff = context.Staff.Where(e => e.Staff_id == id).FirstOrDefault();
+                    // delete Staff where Staff_id = ?
                     response = context.Staff.Remove(staff).ToString();
                     context.SaveChanges();
                 }
@@ -90,7 +95,8 @@ namespace driver_app_api.Controllers
                 }
                 result = new
                 {
-                    response
+                    response,
+                    data = staff
                 };
             }
 
@@ -102,17 +108,18 @@ namespace driver_app_api.Controllers
         {
             dynamic? result = null;
             dynamic? response = null;
+            var staff = new Staff();
             using (var context = new DB(_configuration))
             {
                 try
                 {
-                    var staff = context.Staff.Where(e => e.Staff_id == id).FirstOrDefault();
+                    staff = context.Staff.Where(e => e.Staff_id == id).FirstOrDefault();
                     if (staff == null) return new JsonResult(result);
-                    staff.Staff_name = staffData.Staff_name ??staff.Staff_name;
-                    staff.Staff_lastname = staffData.Staff_lastname??staff.Staff_lastname;
-                    staff.Staff_phone = staffData.Staff_phone ??staff.Staff_phone;
-                   
-                    
+                    staff.Staff_name = staffData.Staff_name ?? staff.Staff_name;
+                    staff.Staff_lastname = staffData.Staff_lastname ?? staff.Staff_lastname;
+                    staff.Staff_phone = staffData.Staff_phone ?? staff.Staff_phone;
+
+                     // update Staff set ? = ? where Staff_id = ?;
                     response = context.Staff.Update(staff).ToString();
                     context.SaveChanges();
                 }
@@ -122,7 +129,8 @@ namespace driver_app_api.Controllers
                 }
                 result = new
                 {
-                    response
+                    response,
+                    data = staff
                 };
             }
 
